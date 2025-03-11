@@ -1,82 +1,96 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const searchForm = document.getElementById("search-form");
+    const searchInput = document.getElementById("search-input");
     const locationText = document.getElementById("location-text");
-    const currentLocationBtn = document.getElementById("current-location-btn");
-    const otherLocationBtn = document.getElementById("other-location-btn"); 
+    const currentLocationBtn = document.getElementById("now-location-btn");
+    const otherLocationBtn = document.getElementById("other-location-btn");
     const restaurantList = document.getElementById("restaurant-list");
 
-    let currentLat = 35.6895; 
-    let currentLng = 139.6917;
 
-    fetchRestaurants(currentLat, currentLng);
+    let currentLat = null; 
+    let currentLng = null;
 
- 
-    currentLocationBtn.addEventListener("click", () => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                currentLat = position.coords.latitude;
-                currentLng = position.coords.longitude;
+    if (searchForm && searchInput) {
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault(); 
+            const keyword = searchInput.value.trim();
+            if (keyword) {
+                window.location.href = `results.html?keyword=${encodeURIComponent(keyword)}`;
+            }
+        });
+    }
 
-                console.log(`📍 현재 위치: ${currentLat}, ${currentLng}`);
-
-  
-                const address = await getAddressFromCoords(currentLat, currentLng);
-                locationText.textContent = `${address} 음식점`;
-
-
-                fetchRestaurants(currentLat, currentLng);
-            }, () => {
-                alert("🔴 위치 정보를 가져올 수 없습니다.");
-            });
-        } else {
-            alert("🔴 위치 서비스가 지원되지 않습니다.");
+    currentLocationBtn.addEventListener("click", async () => {
+        try {
+            const { lat, lng } = await getCurrentLocationFromGoogle();
+            updateLocationAndFetch(lat, lng);
+        } catch (error) {
+            alert("🔴 위치 정보를 가져올 수 없습니다.");
         }
     });
-
   
+ 
     otherLocationBtn.addEventListener("click", () => {
-        currentLat = 35.6938;
-        currentLng = 139.7034;
-        fetchRestaurants(currentLat, currentLng);
+        const locationModalEl = document.getElementById("locationModal");
+        const locationModal = new bootstrap.Modal(locationModalEl);
+        locationModal.show();
     });
-
 
     
-    async function fetchRestaurants(lat, lng, keyword = "", range = 3) {
-        const res = await fetch(`/api/restaurants/search?lat=${lat}&lng=${lng}&range=${range}&keyword=${keyword}`);
-        const data = await res.json();
-        renderRestaurants(data.restaurants);
+    const locationModalEl = document.getElementById("locationModal");
+    if(locationModalEl){
+        locationModalEl.addEventListener("click", (e) => {
+            if(e.target && e.target.matches('.list-group-item')){
+                const lat = e.target.getAttribute("data-lat");
+                const lng = e.target.getAttribute("data-lng");
+                updateLocationAndFetch(lat, lng);
+                const modalInstance = bootstrap.Modal.getInstance(locationModalEl);
+                modalInstance.hide();
+            }
+        });
     }
 
-   
-    async function getAddressFromCoords(lat, lng) {
-        const API_KEY = process.env.GOOGLE_API_KEY;
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}&language=ko`;
+    async function updateLocationAndFetch(lat, lng) {
+        currentLat = lat;
+        currentLng = lng;
+        const address = await getAddressFromCoords(lat, lng);
+        locationText.textContent = `${address} グルメ`;
+        fetchRestaurants(lat, lng);
+    }
 
+    async function getCurrentLocationFromGoogle() {
+        const res = await fetch("/api/google/geolocation");
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        return { lat: data.lat, lng: data.lng };
+    }
+
+    async function fetchRestaurants(lat, lng, keyword = "", range = 3) {
         try {
-            const res = await fetch(url);
+            const res = await fetch(`/api/restaurants/search?lat=${lat}&lng=${lng}&range=${range}&keyword=${keyword}`);
             const data = await res.json();
-            return data.results[0]?.formatted_address || "알 수 없는 위치";
+            renderRestaurants(data.restaurants);
         } catch (error) {
-            console.error("주소 변환 실패:", error);
-            return "알 수 없는 위치";
+            console.error("음식점 데이터를 가져오는 중 오류 발생:", error);
         }
     }
 
-   
+    async function getAddressFromCoords(lat, lng) {
+        const res = await fetch(`/api/google/geocode?lat=${lat}&lng=${lng}`);
+        const data = await res.json();
+        return data.address || "알 수 없는 위치";
+    }
+
     function renderRestaurants(restaurants) {
         restaurantList.innerHTML = ""; 
         const groupedByGenre = {};
 
-      
         restaurants.forEach((r) => {
             const genre = r.genre.name;
-            if (!groupedByGenre[genre]) {
-                groupedByGenre[genre] = [];
-            }
+            if (!groupedByGenre[genre]) groupedByGenre[genre] = [];
             groupedByGenre[genre].push(r);
         });
 
-    
         Object.entries(groupedByGenre).forEach(([genre, shops]) => {
             const categoryBox = document.createElement("div");
             categoryBox.classList.add("category-box");
@@ -96,10 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     <button class="btn-category-arrow right"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             `;
-
             restaurantList.appendChild(categoryBox);
 
-           
             const carousel = categoryBox.querySelector(".carousel");
             categoryBox.querySelector(".left").addEventListener("click", () => {
                 carousel.scrollBy({ left: -300, behavior: "smooth" });
