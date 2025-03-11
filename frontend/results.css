@@ -54,11 +54,11 @@ html, body {
   }
   
   .filter-section {
-    position: absolute;
-    width: 1114px;
+    position: relative;
+    width: 100%;
+    max-width: 1114px;
     height: 261px;
     left: 50%;
-    top: 139px;
     transform: translateX(-50%);  
     background: #FF5C69;
     border-radius: 35px;
@@ -66,13 +66,15 @@ html, body {
     flex-direction: column;
     justify-content: center;
     padding-top: 20px;
+    margin-bottom: 40px;
+
 }
 
 .filter-title {
     font-size: 15px;
     font-weight: 700;
     color: #FFFFFF;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .filter-buttons {
@@ -85,15 +87,14 @@ html, body {
 }
 
 .filter-btn {
-    width: auto;
-    padding: 10px 20px;
-    background: #FFFFFF;
-    color: #FF5C69;
-    border-radius: 25px;
-    font-size: 15px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
+  padding: 12px 24px;
+  background: #FFFFFF;
+  color: #FF5C69;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
 }
 
 
@@ -103,7 +104,12 @@ html, body {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     padding: 20px;
-    max-width: 1114px;
+    width: 100%;
+    margin: 0 auto 40px auto;  
+}
+
+#restaurant-list-results > #pagination {
+  grid-column: 1 / -1;
 }
 
 
@@ -149,9 +155,9 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0;
-    gap: 5px;
-    width: 1114px;
+    margin: 20px auto;
+    gap: 8px;
+    width: 100%;
 }
 
 #pagination button {
