@@ -4,18 +4,18 @@ const { searchRestaurants } = require("../services/hotpepper");
 const router = express.Router();
 
 router.get("/search", async (req, res) => {
-    const { keyword,lat, lng, range } = req.query;
+    const { keyword, lat, lng, range, small_area } = req.query;
 
-    if (!keyword && (!lat || !lng)) {
+    if (!keyword && (!lat || !lng) && !small_area) {
         return res.status(400).json({ error: "位置情報が必要です。" });
     }
 
     try {
-        const restaurants = await searchRestaurants({ keyword, lat, lng, range });
+        const restaurants = await searchRestaurants({ keyword, lat, lng, range, small_area });
         res.json({ restaurants });
     } catch (error) {
-        console.error("🔴 음식점 검색 API 오류:", error);
-        res.status(500).json({ error: "음식점 정보를 가져올 수 없습니다." });
+        console.error("🔴 グルメサーチエラ:", error);
+        res.status(500).json({ error: "グルメサーチエラ" });
     }
 
 });

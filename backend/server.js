@@ -4,6 +4,9 @@ const cors = require("cors");
 const axios = require("axios");
 const path = require("path");
 const restaurantRoutes = require("./routes/restaurants");
+const largeAreaRoutes = require("./routes/largeArea");
+const middleAreaRoutes = require("./routes/middleArea");
+const smallAreaRoutes = require("./routes/smallArea");
 const googleRoutes = require("./routes/google");
 
 const app = express();
@@ -15,8 +18,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.use("/api/google", googleRoutes);
-
 app.use("/api/restaurants", restaurantRoutes);
+app.use("/api/large_area", largeAreaRoutes);
+app.use("/api/middle_area", middleAreaRoutes);
+app.use("/api/small_area", smallAreaRoutes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/index.html"));
