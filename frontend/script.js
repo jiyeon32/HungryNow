@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const locationText = document.getElementById("location-text");
   const currentLocationBtn = document.getElementById("now-location-btn");
   const otherLocationBtn = document.getElementById("other-location-btn");
+  const confirmRangeBtn = document.getElementById("confirm-range-btn");
+  const rangeSelect = document.getElementById("range-select");
   const restaurantList = document.getElementById("restaurant-list");
 
   let currentLat = null;
@@ -20,32 +22,52 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-  currentLocationBtn.addEventListener("click", async () => {
-    try {
-      const { lat, lng } = await getCurrentLocationFromGoogle();
-      updateLocationAndFetch(lat, lng);
-    } catch (error) {
-      alert("🔴 位置情報エラー");
-    }
+  currentLocationBtn.addEventListener("click", () => {
+    const rangeModalEl = document.getElementById("rangeModal");
+    const rangeModal = new bootstrap.Modal(rangeModalEl);
+    rangeModal.show();
   });
 
 
+  confirmRangeBtn.addEventListener("click", async () => {
+    try {
+      const range = rangeSelect.value;
+      const { lat, lng } = await getCurrentLocationFromGoogle();
+      updateLocationAndFetch(lat, lng, range);
+
+
+      const rangeModalEl = document.getElementById("rangeModal");
+      const rangeModal = bootstrap.Modal.getInstance(rangeModalEl);
+      if (rangeModal) rangeModal.hide();
+
+    } catch (error) {
+      alert("🔴 位置情報を取得できませんでした。");
+    }
+  });
+
+  
   otherLocationBtn.addEventListener("click", () => {
     renderLargeAreaSelection();
+
     const locationModalEl = document.getElementById("locationModal");
-    const locationModal = new bootstrap.Modal(locationModalEl);
+    let locationModal = bootstrap.Modal.getInstance(locationModalEl);
+    
+    if (!locationModal) {
+      locationModal = new bootstrap.Modal(locationModalEl);
+    }
+
     locationModal.show();
   });
 
 
-  async function updateLocationAndFetch(lat, lng) {
+  async function updateLocationAndFetch(lat, lng, range = 3) {
     currentLat = lat;
     currentLng = lng;
     const address = await getAddressFromCoords(lat, lng);
     locationText.textContent = `${address} グルメ`;
-    fetchRestaurants(lat, lng);
+    fetchRestaurants(lat, lng, "", range);
   }
+
 
   async function getCurrentLocationFromGoogle() {
     try {
@@ -58,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       throw err;
     }
   }
+
 
   async function fetchRestaurants(lat, lng, keyword = "", range = 3) {
     try {
@@ -272,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = res.data;
       renderRestaurants(data.restaurants);
     } catch (error) {
-      console.error("🔴 グルメサーチ中エラー:", error);
+      console.error("キーワードベースのレストラン検索エラー:", error);
     }
   }
 });

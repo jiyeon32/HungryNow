@@ -53,6 +53,13 @@ header {
   cursor: pointer;
 }
 
+.search-btn {
+  background-color: #FF5C69;
+  border: none;
+  color: white;
+}
+
+
 .hero-section {
   background: #FF5C69;
   color: white;
@@ -106,7 +113,7 @@ header {
 }
 
 .category-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   margin-bottom: 15px;
 }
@@ -119,7 +126,7 @@ header {
 }
 
 .restaurant-name {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
   margin-top: 10px;
 }
@@ -138,18 +145,23 @@ header {
 .btn-category-arrow {
   background: #FF5C69;
   color: white;
-  border-radius: 50%;
+  border-radius: 50px; 
   font-size: 24px;
   border: none;
   cursor: pointer;
+  width: 45px; 
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 
 .carousel-container {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  gap: 35px;
 }
 
 .carousel {
@@ -161,4 +173,18 @@ header {
   padding: 10px;
 }
 
+#location-selection button {
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #FF5C69;
+  border-radius: 5px;
+  background: #fff;
+  color: #FF5C69;
+  font-size: 16px;
+}
+#location-selection h5 {
+  margin-bottom: 15px;
+}
 

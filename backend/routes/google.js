@@ -22,9 +22,19 @@ router.get("/geocode", async (req, res) => {
         const address = response.data.results[0]?.formatted_address || "알 수 없는 위치";
         res.json({ address });
     } catch (error) {
-        console.error("🔴 Google Geocoding API 에러:", error);
-        res.status(500).json({ error: "주소를 변환할 수 없습니다." });
+        console.error("🔴 Google Geocoding API エラー:", error);
+        res.status(500).json({ error: "位置情報を取得できませんでした。" });
     }
+});
+
+router.get("/map", (req, res) => {
+    const { lat, lng } = req.query;
+    if (!lat || !lng) {
+        return res.status(400).json({ error: "緯度と経度が必要です。" });
+    }
+
+    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_API_KEY}&q=${lat},${lng}`;
+    res.json({ url: mapUrl });
 });
 
 module.exports = router;

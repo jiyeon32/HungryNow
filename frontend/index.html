@@ -14,7 +14,9 @@
     <header class="d-flex align-items-center justify-content-between py-3">
       <div class="d-flex align-items-center">
         <i class="fa-solid fa-utensils logo-icon text-danger"></i>
-        <h1 class="text-danger fs-3 mb-0">HungryNow</h1>
+        <h1 class="text-danger fs-3 mb-0">
+          <a href="index.html" class="text-danger text-decoration-none">HungryNow</a>
+      </h1>
       </div>
 
       <div class="search-container  mx-auto">
@@ -40,6 +42,30 @@
 
     <section id="restaurant-list" class="mt-5"></section>
       
+  </div>
+
+  <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rangeModalLabel">検索範囲を選択</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <label for="range-select">検索範囲 (km)</label>
+          <select id="range-select" class="form-select">
+            <option value="1">1km</option>
+            <option value="2">2km</option>
+            <option value="3" selected>3km</option>
+            <option value="5">5km</option>
+            <option value="10">10km</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button id="confirm-range-btn" class="btn search-btn" >検索</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
