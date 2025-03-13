@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const genre = restaurant.genre?.name || "情報なし";
     const budget = restaurant.budget?.name || "情報なし";
-const wifi = restaurant.wifi === "1" ? "사용 가능" : restaurant.wifi === "0" ? "없음" : "未確認";
+const wifi = restaurant.wifi === "1" ? "使用可能" : restaurant.wifi === "0" ? "なし" : "未確認";
 
 container.innerHTML = `
 <div class="restaurant-card">
