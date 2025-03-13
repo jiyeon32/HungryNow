@@ -7,6 +7,8 @@ const restaurantRoutes = require("./routes/restaurants");
 const largeAreaRoutes = require("./routes/largeArea");
 const middleAreaRoutes = require("./routes/middleArea");
 const smallAreaRoutes = require("./routes/smallArea");
+const genreRoutes = require("./routes/genre");
+const budgetRoutes = require("./routes/budget");
 const googleRoutes = require("./routes/google");
 
 const app = express();
@@ -22,6 +24,8 @@ app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/large_area", largeAreaRoutes);
 app.use("/api/middle_area", middleAreaRoutes);
 app.use("/api/small_area", smallAreaRoutes);
+app.use("/api/genre", genreRoutes);
+app.use("/api/budget", budgetRoutes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/index.html"));
