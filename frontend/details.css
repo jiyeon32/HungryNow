@@ -52,3 +52,69 @@ html, body {
     border-radius: 0 30px 30px 0;
     cursor: pointer;
   }
+
+  
+
+  #restaurant-details-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+  .restaurant-card {
+    width: 90%;
+    max-width: 1400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: auto; 
+  }
+  
+  .restaurant-img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .restaurant-info {
+    margin-top: 15px;
+  }
+  
+  .restaurant-name {
+    font-size: 24px;
+    font-weight: bold;
+    color:  #FF5C69;
+  }
+  
+  .restaurant-detail-address {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .map-button {
+    background:  #FF5C69;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .map-button:hover {
+    background: #c9302c;
+  }
+  
+
+  .restaurant-detail-hours,
+  .restaurant-detail-category,
+  .restaurant-detail-wifi,
+  .restaurant-detail-budget {
+    font-size: 15px;
+    margin: 5px 0;
+  }
